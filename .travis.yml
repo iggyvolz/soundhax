@@ -29,7 +29,7 @@ after_success:
   - if [[ -z `git diff --exit-code` ]]; then echo "No changes to the output on this push; exiting."; exit 0; fi
   - git config user.name "Travis CI"
   - git config user.email "travis@example.com"
-  - git add soundhax-$SOURCE_BRANCH.m4a
+  - git add soundhax-$TRAVIS_BRANCH.m4a
   - git commit -m "Deploy to GitHub Pages: ${SHA}"
   - ENCRYPTED_KEY_VAR="encrypted_${ENCRYPTION_LABEL}_key"
   - ENCRYPTED_IV_VAR="encrypted_${ENCRYPTION_LABEL}_iv"
