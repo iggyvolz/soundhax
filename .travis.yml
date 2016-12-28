@@ -20,7 +20,8 @@ after_success:
   - REPO=`git config remote.origin.url`
   - SSH_REPO=${REPO/https:\/\/github.com\//git@github.com:}
   - SHA=`git rev-parse --verify HEAD`
-  - git checkout gh-pages
+  - git checkout --orphan gh-pages
+  - git rm -rf . # Does not remove .gitignored files
   - mv soundhax.m4a soundhax-$SOURCE_BRANCH.m4a
   - if [ -z `git diff --exit-code` ]; then echo "No changes to the output on this push; exiting."; exit 0; fi
   - git config user.name "Travis CI"
