@@ -16,7 +16,26 @@ script:
   - python exp.py
 
 after_success:
-  - ./deploy.sh
+  - if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then echo "Don't build this"; exit 0; fi
+  - REPO=`git config remote.origin.url`
+  - SSH_REPO=${REPO/https:\/\/github.com\//git@github.com:}
+  - SHA=`git rev-parse --verify HEAD`
+  - git checkout gh-pages
+  - mv soundhax.m4a soundhax-$SOURCE_BRANCH.m4a
+  - if [ -z `git diff --exit-code` ]; then echo "No changes to the output on this push; exiting."; exit 0; fi
+  - git config user.name "Travis CI"
+  - git config user.email "travis@example.com"
+  - git add soundhax-$SOURCE_BRANCH.m4a
+  - git commit -m "Deploy to GitHub Pages: ${SHA}"
+  - ENCRYPTED_KEY_VAR="encrypted_${ENCRYPTION_LABEL}_key"
+  - ENCRYPTED_IV_VAR="encrypted_${ENCRYPTION_LABEL}_iv"
+  - ENCRYPTED_KEY=${!ENCRYPTED_KEY_VAR}
+  - ENCRYPTED_IV=${!ENCRYPTED_IV_VAR}
+  - openssl aes-256-cbc -K $ENCRYPTED_KEY -iv $ENCRYPTED_IV -in deploy_key.enc -out deploy_key -d
+  - chmod 600 deploy_key
+  - eval `ssh-agent -s`
+  - ssh-add deploy_key
+  - git push $SSH_REPO $gh-pages
 
 env:
   global:
