@@ -23,7 +23,6 @@ after_success:
   - git checkout --orphan gh-pages
   - git rm -rf . # Does not remove .gitignored files
   - git pull origin gh-pages
-  - echo "x" >> soundhax.m4a # Test screwing up soundhax.m4a
   - mv soundhax.m4a soundhax-$TRAVIS_BRANCH.m4a
   - git status
   - if [[ -z `git diff --exit-code` ]]; then echo "No changes to the output on this push; exiting."; exit 0; fi
