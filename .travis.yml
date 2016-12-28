@@ -22,7 +22,7 @@ after_success:
   - SHA=`git rev-parse --verify HEAD`
   - git checkout --orphan gh-pages
   - git rm -rf . # Does not remove .gitignored files
-  - mv soundhax.m4a soundhax-$SOURCE_BRANCH.m4a
+  - mv soundhax.m4a soundhax-$TRAVIS_BRANCH.m4a
   - git status
   - if [ -z `git diff --exit-code` ]; then echo "No changes to the output on this push; exiting."; exit 0; fi
   - git config user.name "Travis CI"
@@ -37,7 +37,7 @@ after_success:
   - chmod 600 deploy_key
   - eval `ssh-agent -s`
   - ssh-add deploy_key
-  - git push $SSH_REPO $gh-pages
+  - git push $SSH_REPO gh-pages
 
 env:
   global:
