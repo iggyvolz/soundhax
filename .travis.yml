@@ -14,3 +14,11 @@ install:
 
 script:
   - python exp.py
+
+after_success:
+  - ./deploy.sh
+
+env:
+  global:
+  - ENCRYPTION_LABEL: "3df26cf223a2"
+  - COMMIT_AUTHOR_EMAIL: "travis@example.com"
